@@ -1,0 +1,17 @@
+plugin.tx_dkdfeuserbelogin_pi1.logoutButton (
+				<table cellspacing=0 cellpadding=0 border=0 width=100% bgcolor="#eeeeee">
+					<tr>
+						<td bgcolor="#666666"><font face="Tahoma, Arial, Helvetica" size="2">
+							<img src="clear.gif" width="16" height="15"><font color="#FFFFFF"><b>Edit Mode</b></font></font>
+						</td>
+					</tr>
+					<tr>
+						<td><img src="clear.gif" width="16" height="10"></td>
+					</tr>
+					<tr>
+						<td>
+							<img src="clear.gif" width="16" height="13"><a target="_top" class="link2" href="###LOGOUTLINK###">CMS LogOut</a>
+						</td>
+					</tr>
+				</table></p>
+)
