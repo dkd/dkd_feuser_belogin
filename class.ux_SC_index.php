@@ -22,7 +22,7 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 /**
- * Redaclared function checkRedirect() for disabling confusing 'No Cookie' warning for the 'dkd_feuser_belogin' extension for TYPO3 3.6.x
+ * Redaclared function checkRedirect() for disabling confusing 'No Cookie' warning for the 'dkd_feuser_belogin' extension for TYPO3 4.2.x
  *
  * @author	Rainer Kuhn <t3extensions@punkt.de>
  * (originally Ingmar Schlecht <ingmar@typo3.org>)
@@ -30,6 +30,11 @@
 
 class ux_SC_index extends SC_index {					
     
+	/**
+	 * Checking, if we should perform some sort of redirection OR closing of windows.
+	 *
+	 * @return	void
+	 */
 	function checkRedirect()	{
 		global $BE_USER,$TBE_TEMPLATE;
 
@@ -38,14 +43,33 @@ class ux_SC_index extends SC_index {
 		if ($BE_USER->user['uid'] && ($this->commandLI || $this->loginRefresh || !$this->interfaceSelector))	{
 
 				// If no cookie has been set previously we tell people that this is a problem. This assumes that a cookie-setting script (like this one) has been hit at least once prior to this instance.
-			if (!$GLOBALS["_COOKIE"]["fe_typo_user"]&&!$GLOBALS['_COOKIE'][$BE_USER->name])	{
-				t3lib_BEfunc::typo3PrintError ('Login-error',"Yeah, that's a classic. No cookies, no TYPO3.<br /><br />Please accept cookies from TYPO3 - otherwise you'll not be able to use the system.",0);
-				exit;
+ 			if (!$_COOKIE['fe_typo_user'] && !$_COOKIE[$BE_USER->name])	{
+				if ($this->commandLI=='setCookie') {
+						// we tried it a second time but still no cookie
+						// 26/4 2005: This does not work anymore, because the saving of challenge values in $_SESSION means the system will act as if the password was wrong.
+					t3lib_BEfunc::typo3PrintError ('Login-error',"Yeah, that's a classic. No cookies, no TYPO3.<br /><br />Please accept cookies from TYPO3 - otherwise you'll not be able to use the system.",0);
+					exit;
+				} else {
+						// try it once again - that might be needed for auto login
+					$this->redirectToURL = 'index.php?commandLI=setCookie';
+				}
 			}
+
+			if ($redirectToURL = (string)$BE_USER->getTSConfigVal('auth.BE.redirectToURL')) {
+				$this->redirectToURL = $redirectToURL;
+				$this->GPinterface = '';
+ 			}
+
+				// store interface
+			$BE_USER->uc['interfaceSetup'] = $this->GPinterface;
+			$BE_USER->writeUC();
 
 				// Based on specific setting of interface we set the redirect script:
 			switch ($this->GPinterface)	{
 				case 'backend':
+					$this->redirectToURL = 'backend.php';
+				break;
+				case 'backend_old':
 					$this->redirectToURL = 'alt_main.php';
 				break;
 				case 'frontend':
@@ -65,6 +89,9 @@ class ux_SC_index extends SC_index {
 					}
 				');
 			}
+
+		} elseif (!$BE_USER->user['uid'] && $this->commandLI) {
+			sleep(5);	// Wrong password, wait for 5 seconds
 		}
 	}
 }
