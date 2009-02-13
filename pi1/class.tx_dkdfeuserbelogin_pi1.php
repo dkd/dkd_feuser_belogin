@@ -56,14 +56,11 @@ class tx_dkdfeuserbelogin_pi1 extends tslib_pibase {
 
 		$is_fe_user=0;
 		$is_be_user=0;
-
-		if ($_COOKIE["fe_typo_user"]) {
-			# patch by Mauro Lorenzutti of webformat.com to work with DBAL
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery("fe.tx_dkdfeuserbelogin_relatedbeuser, fes.ses_userid", "fe_sessions AS fes, fe_users AS fe", "fes.ses_id='".$_COOKIE["fe_typo_user"]."' AND fes.ses_userid = fe.uid");
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==1)	{
-				$fe_user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				$is_fe_user=1;
-			}
+		
+		# patch by julian kleinhans from marketing factory
+		if (is_array($GLOBALS['TSFE']->fe_user->user)) {
+			$fe_user = $GLOBALS['TSFE']->fe_user->user;
+			$is_fe_user = 1;
 		}
 
 		if ($_COOKIE["be_typo_user"]) {
