@@ -1,19 +1,19 @@
 <?php
 if (!defined ("TYPO3_MODE")) 	die ("Access denied.");
 $tempColumns = Array (
-	"tx_dkdfeuserbelogin_relatedbeuser" => Array (		
-		"exclude" => 1,		
-		"label" => "LLL:EXT:dkd_feuser_belogin/locallang_db.php:fe_users.tx_dkdfeuserbelogin_relatedbeuser",		
+	"tx_dkdfeuserbelogin_relatedbeuser" => Array (
+		"exclude" => 1,
+		"label" => "LLL:EXT:dkd_feuser_belogin/locallang_db.php:fe_users.tx_dkdfeuserbelogin_relatedbeuser",
 		"config" => Array (
-			"type" => "select",	
+			"type" => "select",
 			"items" => Array (
 				Array("",0),
 			),
-			"foreign_table" => "be_users",	
-			"foreign_table_where" => "AND be_users.pid=###SITEROOT### ORDER BY be_users.uid",	
-			"size" => 1,	
+			"foreign_table" => "be_users",
+			"foreign_table_where" => "AND be_users.pid=0 ORDER BY be_users.uid",
+			"size" => 1,
 			"minitems" => 0,
-			"maxitems" => 1,	
+			"maxitems" => 1,
 			"wizards" => Array(
 				"_PADDING" => 2,
 				"_VERTICAL" => 1,

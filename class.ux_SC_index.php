@@ -28,8 +28,8 @@
  * (originally Ingmar Schlecht <ingmar@typo3.org>)
  */
 
-class ux_SC_index extends SC_index {					
-    
+class ux_SC_index extends SC_index {
+
 	/**
 	 * Checking, if we should perform some sort of redirection OR closing of windows.
 	 *
@@ -43,7 +43,7 @@ class ux_SC_index extends SC_index {
 		if ($BE_USER->user['uid'] && ($this->commandLI || $this->loginRefresh || !$this->interfaceSelector))	{
 
 				// If no cookie has been set previously we tell people that this is a problem. This assumes that a cookie-setting script (like this one) has been hit at least once prior to this instance.
- 			if (!$_COOKIE['fe_typo_user'] && !$_COOKIE[$BE_USER->name])	{
+			if (!$_COOKIE['fe_typo_user'] && !$_COOKIE[$BE_USER->name])	{
 				if ($this->commandLI=='setCookie') {
 						// we tried it a second time but still no cookie
 						// 26/4 2005: This does not work anymore, because the saving of challenge values in $_SESSION means the system will act as if the password was wrong.
@@ -58,7 +58,7 @@ class ux_SC_index extends SC_index {
 			if ($redirectToURL = (string)$BE_USER->getTSConfigVal('auth.BE.redirectToURL')) {
 				$this->redirectToURL = $redirectToURL;
 				$this->GPinterface = '';
- 			}
+			}
 
 				// store interface
 			$BE_USER->uc['interfaceSetup'] = $this->GPinterface;
@@ -82,7 +82,7 @@ class ux_SC_index extends SC_index {
 				header('Location: '.t3lib_div::locationHeaderUrl($this->redirectToURL));
 				exit;
 			} else {
-				$TBE_TEMPLATE->JScode.=$TBE_TEMPLATE->wrapScriptTags('
+				$TBE_TEMPLATE->JScode .= $TBE_TEMPLATE->wrapScriptTags('
 					if (parent.opener && parent.opener.busy)	{
 						parent.opener.busy.loginRefreshed();
 						parent.close();
